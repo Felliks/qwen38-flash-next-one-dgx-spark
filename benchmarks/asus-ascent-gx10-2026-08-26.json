@@ -21,8 +21,9 @@
     "max_running_requests": 4,
     "mtp": {
       "algorithm": "NEXTN",
-      "steps": 3,
-      "draft_tokens": 4,
+      "profile": "MTP-213",
+      "steps": 2,
+      "draft_tokens": 3,
       "top_k": 1
     },
     "ple": {
@@ -35,16 +36,23 @@
   "results": {
     "single_stream": {
       "generated_tokens": 512,
-      "decode_seconds": 13.446858449,
-      "output_tokens_per_second": 38.075807962,
-      "time_to_first_token_seconds": 0.298
+      "runs_output_tokens_per_second": [
+        28.077918845,
+        32.772167695,
+        32.726943136
+      ],
+      "steady_state_output_tokens_per_second": 32.7,
+      "steady_state_decode_seconds": 15.644601999,
+      "steady_state_time_to_first_token_seconds": 0.285725959
     },
     "four_stream_batch": {
       "requests": 4,
       "generated_tokens_per_request": 768,
-      "wall_time_seconds": 68.480,
-      "aggregate_output_tokens_per_second": 44.86,
-      "observed_scheduler_peak_tokens_per_second": 52.2
+      "repetitions": 2,
+      "wall_time_seconds": [32.901, 33.034],
+      "aggregate_output_tokens_per_second": [93.372, 92.996],
+      "per_request_output_tokens_per_second_range": [23.636, 23.807],
+      "observed_scheduler_peak_tokens_per_second": 103.36
     },
     "resident_system_memory_gb": 120.45,
     "gpu_utilization_percent": 90,
@@ -52,6 +60,7 @@
   },
   "notes": [
     "Measurements use the pinned checkpoint and launch path in this repository.",
+    "MTP uses SGLang's official MTP-213 profile: two steps, top-k one, three draft tokens.",
     "The four-stream result is aggregate throughput, not per-request throughput.",
     "Dashboard screenshots are included in the assets directory."
   ]

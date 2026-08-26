@@ -18,12 +18,12 @@ architecture and 128 GB unified memory; DGX Spark confirmations are welcome.
 | Model | Qwen3.8-Flash-Next NVFP4 |
 | Main / active parameters | 125B / 6B per token |
 | Additional PLE n-gram table | 51B parameters, 51.2 GB FP8 mmap on NVMe |
-| Speculative decoding | Native MTP / NEXTN, 3 steps, 4 draft tokens |
+| Speculative decoding | Native MTP / NEXTN, official MTP-213 profile (2 steps, top-k 1, 3 draft tokens) |
 | Context per request | 262,144 tokens (native) |
 | Shared KV pool | 524,288 BF16 tokens |
 | Active requests | Up to 4; two can each consume a full 262K window |
-| Single-stream decode | 38.1 output tokens/s |
-| Four-stream batch | ~44.9 output tokens/s aggregate, observed peak 52.2 |
+| Single-stream decode | 32.7 output tokens/s steady-state |
+| Four-stream batch | 93.0–93.4 output tokens/s aggregate, observed peak 103.36 |
 | Resident system memory | 120.45 / 128 GB including the OS |
 | GPU utilization during generation | ~90% |
 | Cold load | About 9.5 minutes |
@@ -35,6 +35,11 @@ architecture and 128 GB unified memory; DGX Spark confirmations are welcome.
 
 These are measurements from the included pinned checkpoint and launch path,
 not estimates copied from another GPU.
+
+The launch profile follows [SGLang's official **MTP-213** recommendation](https://www.lmsys.org/blog/2026-08-26-qwen-flash-next/)
+for Qwen3.8-Flash-Next: 2 speculative steps, top-k 1 and 3 draft tokens. In two
+repeated four-request batches, each request sustained about 23.6–23.8 output
+tokens/s while sharing the same server.
 
 The structured measurement record is available in
 [`benchmarks/asus-ascent-gx10-2026-08-26.json`](benchmarks/asus-ascent-gx10-2026-08-26.json).
@@ -132,7 +137,7 @@ chunked prefill:            4096
 static memory fraction:    0.95
 Mamba cache paths:         20
 MTP algorithm:             NEXTN
-MTP steps / draft tokens:  3 / 4
+MTP profile:               213 (2 steps / top-k 1 / 3 draft tokens)
 PLE row cache:              256 MiB
 ```
 

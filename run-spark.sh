@@ -110,6 +110,7 @@ serve() {
     return 1
   fi
 
+  # Qwen3.8-Flash-Next uses SGLang's official MTP-213 profile below.
   docker run -d --rm --init \
     --name "$CONTAINER" \
     --gpus all \
@@ -156,9 +157,9 @@ serve() {
     --cuda-graph-backend-decode disabled \
     --disable-flashinfer-autotune \
     --speculative-algorithm NEXTN \
-    --speculative-num-steps 3 \
+    --speculative-num-steps 2 \
     --speculative-eagle-topk 1 \
-    --speculative-num-draft-tokens 4
+    --speculative-num-draft-tokens 3
 
   printf 'Starting. First load can take about 10 minutes. Follow it with: ./run-spark.sh logs\n'
   printf 'API when ready: http://%s:%s/v1\n' "$BIND_ADDR" "$API_PORT"
