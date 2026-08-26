@@ -22,8 +22,18 @@ jobs:
             prepare_ple.py
       - name: Reject private deployment details
         run: |
-          if grep -R -n -E '/home/felliks|10\.8\.0\.' \
-            --exclude-dir=.git --exclude='*.png' .; then
-            echo 'Private deployment details found.' >&2
-            exit 1
-          fi
+          python - <<'PY'
+          from pathlib import Path
+
+          needles = (b"/home/" + b"felliks", b"10." + b"8.0.")
+          violations = []
+          for path in Path(".").rglob("*"):
+              if not path.is_file() or any(part in {".git", "assets"} for part in path.parts):
+                  continue
+              data = path.read_bytes()
+              if any(needle in data for needle in needles):
+                  violations.append(str(path))
+
+          if violations:
+              raise SystemExit("Private deployment details found: " + ", ".join(violations))
+          PY
