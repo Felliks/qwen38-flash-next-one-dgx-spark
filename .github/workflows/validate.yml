@@ -1,0 +1,29 @@
+name: Validate
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  static-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Check shell syntax
+        run: bash -n run-spark.sh
+      - name: Compile Python sources
+        run: |
+          python -m py_compile \
+            patch_qwen4_ple_disk_cache.py \
+            patch_sm121_qsa_sdpa.py \
+            prepare_ple.py
+      - name: Reject private deployment details
+        run: |
+          if grep -R -n -E '/home/felliks|10\.8\.0\.' \
+            --exclude-dir=.git --exclude='*.png' .; then
+            echo 'Private deployment details found.' >&2
+            exit 1
+          fi

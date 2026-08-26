@@ -1,0 +1,8 @@
+Qwen3.8-Flash-Next on one DGX Spark
+Copyright 2026 Mykyta Roshchenko
+
+This product builds on SGLang, licensed under the Apache License 2.0.
+https://github.com/sgl-project/sglang
+
+Model weights are downloaded separately and are governed by the Qwen Community
+License 1.0. No model weights are distributed with this repository.

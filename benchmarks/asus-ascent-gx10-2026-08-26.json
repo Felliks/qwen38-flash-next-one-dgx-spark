@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "measured_at": "2026-08-26",
+  "hardware": {
+    "system": "ASUS Ascent GX10",
+    "soc": "NVIDIA GB10",
+    "compute_capability": "12.1",
+    "unified_memory_gb": 128
+  },
+  "software": {
+    "model": "RadixArk/Qwen3.8-Flash-Next-NVFP4",
+    "model_revision": "7b719225242aacd3dbd3f9407468c2ee9a9d2594",
+    "served_model_name": "qwen38-flash-next-nvfp4-mtp",
+    "sglang_commit": "d91c3682b0b429e4c70df63cd57f819588ce29b0",
+    "qwen4_source_commit": "73a255206f916366c8d26d4022f82ddfb0ab558d"
+  },
+  "configuration": {
+    "context_length_tokens": 262144,
+    "shared_kv_pool_tokens": 524288,
+    "kv_cache_dtype": "bfloat16",
+    "max_running_requests": 4,
+    "mtp": {
+      "algorithm": "NEXTN",
+      "steps": 3,
+      "draft_tokens": 4,
+      "top_k": 1
+    },
+    "ple": {
+      "storage": "NVMe mmap",
+      "dtype": "float8_e4m3fn",
+      "file_size_bytes": 51200000000,
+      "pinned_row_cache_bytes": 268435456
+    }
+  },
+  "results": {
+    "single_stream": {
+      "generated_tokens": 512,
+      "decode_seconds": 13.446858449,
+      "output_tokens_per_second": 38.075807962,
+      "time_to_first_token_seconds": 0.298
+    },
+    "four_stream_batch": {
+      "requests": 4,
+      "generated_tokens_per_request": 768,
+      "wall_time_seconds": 68.480,
+      "aggregate_output_tokens_per_second": 44.86,
+      "observed_scheduler_peak_tokens_per_second": 52.2
+    },
+    "resident_system_memory_gb": 120.45,
+    "gpu_utilization_percent": 90,
+    "cold_load_minutes": 9.5
+  },
+  "notes": [
+    "Measurements use the pinned checkpoint and launch path in this repository.",
+    "The four-stream result is aggregate throughput, not per-request throughput.",
+    "Dashboard screenshots are included in the assets directory."
+  ]
+}
